@@ -16,7 +16,7 @@ namespace Unity.Netcode
         /// <summary>
         /// The currently spawned objects
         /// </summary>
-        public readonly Dictionary<ulong, NetworkObject> SpawnedObjects = new Dictionary<ulong, NetworkObject>();
+        public readonly EventDictionary<ulong, NetworkObject> SpawnedObjects = new EventDictionary<ulong, NetworkObject>();
 
         /// <summary>
         /// A list of the spawned objects
@@ -30,7 +30,7 @@ namespace Unity.Netcode
         /// Server: Keeps track of all clients' ownership
         /// Client: Keeps track of only its ownership
         /// </summary>
-        public readonly Dictionary<ulong, Dictionary<ulong, NetworkObject>> OwnershipToObjectsTable = new Dictionary<ulong, Dictionary<ulong, NetworkObject>>();
+        public readonly EventDictionary<ulong, EventDictionary<ulong, NetworkObject>> OwnershipToObjectsTable = new EventDictionary<ulong, EventDictionary<ulong, NetworkObject>>();
 
         /// <summary>
         /// Object to Ownership Table:
@@ -129,7 +129,7 @@ namespace Unity.Netcode
             // If the owner doesn't have an entry then create one
             if (!OwnershipToObjectsTable.ContainsKey(newOwner))
             {
-                OwnershipToObjectsTable.Add(newOwner, new Dictionary<ulong, NetworkObject>());
+                OwnershipToObjectsTable.Add(newOwner, new EventDictionary<ulong, NetworkObject>());
             }
 
             // Sanity check to make sure we don't already have this entry (we shouldn't)
@@ -157,7 +157,7 @@ namespace Unity.Netcode
         {
             if (!OwnershipToObjectsTable.ContainsKey(clientId))
             {
-                OwnershipToObjectsTable.Add(clientId, new Dictionary<ulong, NetworkObject>());
+                OwnershipToObjectsTable.Add(clientId, new EventDictionary<ulong, NetworkObject>());
             }
             return OwnershipToObjectsTable[clientId].Values.ToList();
         }
